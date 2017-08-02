@@ -1,0 +1,23 @@
+{
+  "name": "fulldive-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "fillBottles.js",
+  "dependencies": {
+    "jasmine": "^2.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AventaWonk/Fulldive-test.git"
+  },
+  "author": "Roman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AventaWonk/Fulldive-test/issues"
+  },
+  "homepage": "https://github.com/AventaWonk/Fulldive-test#readme"
+}
