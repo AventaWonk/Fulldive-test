@@ -1,44 +1,39 @@
 
 module.exports = function (queueRedBottles, queueBlueBottles) {
-  let redBottles = queueRedBottles;
   let blueBottles = queueBlueBottles;
-  let bottlesInformation = [];
+  let redBottles = queueRedBottles;
+  let info = [];
 
-  if (redBottles.length <= 0 || blueBottles.length <= 0 ) {
-    return "Bad params";
-  }
+  let lastNotFilledBottle = 0;
+  for (let i = 0; i < redBottles.length; i++) {
+    if (redBottles[i] < 0)
+      throw new Error("Bad volume of " + i + "red bottle");
 
-  for (let i = 0; i < blueBottles.length; i++) {
-    if (blueBottles[i] < 0) {
-      return "Bad volume of " + i+1 + "blue bottle";
-    } else if (blueBottles[i] > 0) {
-      for (var k = 0; k < redBottles.length; k++) {
-        if (redBottles[k] < 0) {
-          return "Bad volume of " + k+1 + "red bottle";
-        } else if (redBottles[k] > 0) {
-          let currentBlueBottle = blueBottles[i];
-          let currentRedBottle = redBottles[k];
+    for (let j = lastNotFilledBottle; j < blueBottles.length; j++) {
+      if (blueBottles[j] < 0)
+        throw new Error("Bad volume of " + j + "blue bottle");
 
-          redResidualVolume = currentRedBottle - currentBlueBottle;
+      if (typeof info[lastNotFilledBottle] != 'object') {
+        info[lastNotFilledBottle] = {};
+      }
 
-          if (redResidualVolume > 0) {
-            bottlesInformation.push("Poured to " + (k+1) + " bottle " + currentBlueBottle + " liters");
-            redBottles[k] = redResidualVolume;
-            blueBottles[i] = 0;
-            break;
-          } else if (redResidualVolume < 0) {
-            bottlesInformation.push("Poured to " + (k+1) + " bottle " + currentRedBottle + " liters");
-            blueBottles[i] = currentBlueBottle - currentRedBottle;
-            redBottles[k] = 0;
-            continue;
-          } else {
-            bottlesInformation.push("Poured to " + (k+1) + " bottle " + currentRedBottle + " liters");
-            redBottles[k] = 0;
-            break;
-          }
-        }
+      let result = redBottles[i] - blueBottles[j];
+      if (result > 0) {
+        redBottles[i] = result;
+        info[j][i] = blueBottles[j];
+        lastNotFilledBottle++;
+        continue;
+      } else if (result < 0) {
+        blueBottles[j] = blueBottles[j] - redBottles[i];
+        info[j][i] =  redBottles[i];
+        break;
+      } else {
+        info[j][i]= redBottles[i];
+        lastNotFilledBottle++;
+        break;
       }
     }
   }
-  return bottlesInformation;
+
+  return info;
 }
